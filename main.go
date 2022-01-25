@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -12,7 +13,7 @@ import (
 func main() {
 	port := os.Getenv("PORT")	
 	if port == "" {
-		port = "8000"
+		port = "8080"
 	}
 
 	router := gin.New()
@@ -21,6 +22,13 @@ func main() {
 	if mode == "release" {
 		gin.SetMode(gin.ReleaseMode)
 	}
+
+	router.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"message":              "Welcome to InJapan Backend API",
+			"public-get-endpoints": "/api/blogs, /api/blogs/:blogid, /api/tag, /api/tag/tag:id",
+		})
+	})
 	
 	router.Use(gin.Logger())
 	router.Use(middleware.CORSMiddleware())
