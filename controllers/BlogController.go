@@ -144,11 +144,15 @@ func SendEmail() gin.HandlerFunc{
 			return
 		}
 
-		if err := godotenv.Load(); err != nil {
-			log.Panic(err)
-		}
 		username := os.Getenv("EMAIL_USER_NAME")
 		password := os.Getenv("EMAIL_PASSWORD")
+		if username == "" || password == "" {
+			if err := godotenv.Load(); err != nil {
+				log.Panic(err)
+			}
+			username = os.Getenv("EMAIL_USER_NAME")
+			password = os.Getenv("EMAIL_PASSWORD")
+		}
 
 		auth := smtp.PlainAuth("", username, password, "smtp.gmail.com")
 		
